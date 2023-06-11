@@ -1,4 +1,4 @@
-import { Prop, Schema } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 
 @Schema()
 export class Game {
@@ -26,3 +26,5 @@ export class Game {
 	@Prop({ type: String, default: "" })
 	p_two_location: string;
 }
+
+export const GameSchema = SchemaFactory.createForClass(Game);
