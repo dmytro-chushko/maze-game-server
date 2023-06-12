@@ -3,7 +3,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { Game } from "./shemas/game.shema";
 import { GAME_STATUS, IGame } from "src/types/game.types";
-import { CreateGameDto, JoinGameDto } from "./dto";
+import { CreateGameDto } from "./dto";
 
 @Injectable()
 export class GameService {
@@ -31,9 +31,8 @@ export class GameService {
 		}
 	}
 
-	async joinGame(joinGameDto: JoinGameDto): Promise<IGame> {
+	async joinGame(gameId: string, player_two: string): Promise<IGame> {
 		try {
-			const { gameId, player_two } = joinGameDto;
 			const game = await this.gameModel.findOneAndUpdate(
 				{ _id: gameId },
 				{ player_two, status: GAME_STATUS.STARTED },
@@ -44,6 +43,19 @@ export class GameService {
 			}
 
 			return game;
+		} catch (error) {
+			throw new HttpException(`${error}`, error.status);
+		}
+	}
+
+	async abortGame(id: string): Promise<{ message: string }> {
+		try {
+			const abortedGame = await this.gameModel.findByIdAndDelete({ _id: id });
+			if (!abortedGame) {
+				throw new HttpException("game dosn't exist", HttpStatus.BAD_REQUEST);
+			}
+
+			return { message: "Game has been aborted" };
 		} catch (error) {
 			throw new HttpException(`${error}`, error.status);
 		}
