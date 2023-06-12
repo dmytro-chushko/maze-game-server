@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { GAME_STATUS } from "src/types/game.types";
 
-@Schema()
+@Schema({ timestamps: true })
 export class Game {
 	@Prop({ type: String, required: true })
 	player_one: string;
