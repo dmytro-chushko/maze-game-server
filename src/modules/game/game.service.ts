@@ -2,12 +2,22 @@ import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { Game } from "./shemas/game.shema";
-import { IGame } from "src/types/game.types";
+import { GAME_STATUS, IGame } from "src/types/game.types";
 import { CreateGameDto, JoinGameDto } from "./dto";
 
 @Injectable()
 export class GameService {
 	constructor(@InjectModel(Game.name) private gameModel: Model<IGame>) {}
+
+	async getAllPendingGames(): Promise<IGame[]> {
+		try {
+			const games = await this.gameModel.find({ status: GAME_STATUS.PENDING });
+
+			return games;
+		} catch (error) {
+			throw new HttpException(`${error}`, error.status);
+		}
+	}
 
 	async createGame(createGameDto: CreateGameDto): Promise<IGame> {
 		try {
@@ -26,7 +36,7 @@ export class GameService {
 			const { gameId, player_two } = joinGameDto;
 			const game = await this.gameModel.findOneAndUpdate(
 				{ _id: gameId },
-				{ player_two, start: true },
+				{ player_two, status: GAME_STATUS.STARTED },
 				{ new: true },
 			);
 			if (!game) {

@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { GAME_STATUS } from "src/types/game.types";
 
 @Schema()
 export class Game {
@@ -8,8 +9,8 @@ export class Game {
 	@Prop({ type: String, default: "" })
 	player_two: string;
 
-	@Prop({ type: Boolean, default: false })
-	start: boolean;
+	@Prop({ type: String, default: GAME_STATUS.PENDING })
+	status: GAME_STATUS;
 
 	@Prop({ type: String, default: "" })
 	turn: string;
