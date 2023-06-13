@@ -19,6 +19,19 @@ export class GameService {
 		}
 	}
 
+	async getGameById(id: string): Promise<IGame> {
+		try {
+			const game = await this.gameModel.findById(id);
+			if (!game) {
+				throw new HttpException("game dosn't exist", HttpStatus.BAD_REQUEST);
+			}
+
+			return game;
+		} catch (error) {
+			throw new HttpException(`${error}`, error.status);
+		}
+	}
+
 	async createGame(createGameDto: CreateGameDto): Promise<IGame> {
 		try {
 			const newGame = new this.gameModel(createGameDto);
@@ -33,16 +46,10 @@ export class GameService {
 
 	async joinGame(gameId: string, player_two: string): Promise<IGame> {
 		try {
-			const game = await this.gameModel.findOneAndUpdate(
-				{ _id: gameId },
-				{ player_two, status: GAME_STATUS.STARTED },
-				{ new: true },
-			);
-			if (!game) {
-				throw new HttpException("game dosn't exist", HttpStatus.BAD_REQUEST);
-			}
+			const game = await this.getGameById(gameId);
+			const updatedGame = await game.set({ player_two, status: GAME_STATUS.STARTED }).save();
 
-			return game;
+			return updatedGame;
 		} catch (error) {
 			throw new HttpException(`${error}`, error.status);
 		}
@@ -50,10 +57,9 @@ export class GameService {
 
 	async abortGame(id: string): Promise<{ message: string }> {
 		try {
-			const abortedGame = await this.gameModel.findByIdAndDelete({ _id: id });
-			if (!abortedGame) {
-				throw new HttpException("game dosn't exist", HttpStatus.BAD_REQUEST);
-			}
+			const game = await this.getGameById(id);
+
+			await game.deleteOne();
 
 			return { message: "Game has been aborted" };
 		} catch (error) {
