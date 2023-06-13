@@ -13,6 +13,11 @@ export class GameController {
 		return this.gameService.getAllPendingGames();
 	}
 
+	@Get(ROUTE_KEYS.ID)
+	getGameById(@Param("id") id: string): Promise<IGame> {
+		return this.gameService.getGameById(id);
+	}
+
 	@Post()
 	createGame(@Body() createGameDto: CreateGameDto): Promise<IGame> {
 		return this.gameService.createGame(createGameDto);

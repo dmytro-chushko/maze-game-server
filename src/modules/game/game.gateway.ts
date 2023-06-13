@@ -21,4 +21,9 @@ export class GameGateway {
 	handleAbortGame(): void {
 		this.server.emit("update-game-list");
 	}
+
+	@SubscribeMessage("join-game")
+	handleJoinGame(): void {
+		this.server.emit("start-game");
+	}
 }
