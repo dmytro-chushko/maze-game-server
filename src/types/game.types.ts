@@ -1,5 +1,13 @@
 import { Document } from "mongoose";
 
+export enum GAME_EVENT {
+	CREATE_GAME = "create-game",
+	ABORT_GAME = "abort-game",
+	JOIN_GAME = "join-game",
+	START_GAME = "start-game",
+	UPDATE_GAME_LIST = "update-game-list",
+}
+
 export enum GAME_STATUS {
 	PENDING = "pending",
 	STARTED = "started",
