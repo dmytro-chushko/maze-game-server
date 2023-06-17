@@ -21,6 +21,18 @@ export interface IGame extends Document {
 	turn: string;
 	winner: string;
 	maze: string;
-	p_one_locztion: string;
+	p_one_location: string;
 	p_two_location: string;
+}
+
+export type maze = boolean[][];
+
+export interface IExit {
+	exitX: number;
+	exitY: number;
+}
+
+export interface IPoint {
+	pointX: number;
+	pointY: number;
 }

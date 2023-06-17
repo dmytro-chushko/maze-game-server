@@ -4,6 +4,7 @@ import { Model } from "mongoose";
 import { Game } from "./shemas/game.shema";
 import { GAME_STATUS, IGame } from "src/types/game.types";
 import { CreateGameDto } from "./dto";
+import { generateMaze } from "src/utils/generate-maze";
 
 @Injectable()
 export class GameService {
@@ -34,7 +35,20 @@ export class GameService {
 
 	async createGame(createGameDto: CreateGameDto): Promise<IGame> {
 		try {
-			const newGame = new this.gameModel(createGameDto);
+			const { player_one } = createGameDto;
+			console.log(player_one);
+			const { maze, playerOnePoint, playerTwoPoint, exit } = generateMaze(15);
+			console.log(maze);
+			console.log(playerOnePoint);
+			console.log(playerTwoPoint);
+			console.log(exit);
+			const newGame = new this.gameModel({
+				player_one,
+				maze,
+				p_one_location: playerOnePoint,
+				p_two_location: playerTwoPoint,
+				exit,
+			});
 
 			await newGame.save();
 
@@ -47,7 +61,8 @@ export class GameService {
 	async joinGame(gameId: string, player_two: string): Promise<IGame> {
 		try {
 			const game = await this.getGameById(gameId);
-			const updatedGame = await game.set({ player_two, status: GAME_STATUS.STARTED }).save();
+			const turn = Math.round(Math.random());
+			const updatedGame = await game.set({ player_two, status: GAME_STATUS.STARTED, turn }).save();
 
 			return updatedGame;
 		} catch (error) {
