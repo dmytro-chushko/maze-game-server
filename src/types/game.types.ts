@@ -18,11 +18,13 @@ export interface IGame extends Document {
 	player_one: string;
 	player_two: string;
 	status: GAME_STATUS;
-	turn: string;
+	turn: number;
 	winner: string;
-	maze: string;
-	p_one_location: string;
-	p_two_location: string;
+	maze?: maze;
+	game_flow_maze: maze;
+	p_one_location: IPoint;
+	p_two_location: IPoint;
+	exit: IExit;
 }
 
 export type maze = boolean[][];

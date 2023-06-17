@@ -21,6 +21,9 @@ export class Game {
 	@Prop({ type: Array, default: "" })
 	maze: maze;
 
+	@Prop({ type: Array, required: true })
+	game_flow_maze: maze;
+
 	@Prop({ type: Object, required: true })
 	p_one_location: IPoint;
 
