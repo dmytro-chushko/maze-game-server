@@ -8,6 +8,9 @@ import {
 import { Server, Socket } from "socket.io";
 import { CHAT_EVENT } from "src/types/chat.types";
 import { ChatIdDto, CreateMessageDto } from "./dto";
+import { GameService } from "src/modules/game/game.service";
+import { GAME_EVENT } from "src/types/game.types";
+import { MoveDto } from "src/modules/game/dto/move.dto";
 
 @WebSocketGateway({
 	cors: {
@@ -15,6 +18,8 @@ import { ChatIdDto, CreateMessageDto } from "./dto";
 	},
 })
 export class ChatGateway {
+	constructor(private readonly gameService: GameService) {}
+
 	@WebSocketServer()
 	server: Server;
 
@@ -33,6 +38,12 @@ export class ChatGateway {
 	handleMessage(@MessageBody() payload: CreateMessageDto): void {
 		this.server
 			.to(payload.chatId)
-			.emit("message", { sender: payload.sender, message: payload.message });
+			.emit(CHAT_EVENT.MESSAGE, { sender: payload.sender, message: payload.message });
+	}
+
+	@SubscribeMessage(GAME_EVENT.MOVE)
+	async handleMove(@MessageBody() payload: MoveDto): Promise<void> {
+		const message = await this.gameService.makeMove(payload);
+		this.server.to(payload.id).emit(GAME_EVENT.MOVE, { message });
 	}
 }

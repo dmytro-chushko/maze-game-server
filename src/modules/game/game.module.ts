@@ -10,5 +10,6 @@ import { GameGateway } from "./game.gateway";
 	imports: [MongooseModule.forFeature([{ name: Game.name, schema: GameSchema }])],
 	controllers: [GameController],
 	providers: [GameService, GameGateway],
+	exports: [GameService],
 })
 export class GameModule {}

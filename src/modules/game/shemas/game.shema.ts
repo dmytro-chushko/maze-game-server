@@ -22,7 +22,10 @@ export class Game {
 	maze: maze;
 
 	@Prop({ type: Array, required: true })
-	game_flow_maze: maze;
+	p_one_game_flow_maze: maze;
+
+	@Prop({ type: Array, required: true })
+	p_two_game_flow_maze: maze;
 
 	@Prop({ type: Object, required: true })
 	p_one_location: IPoint;
