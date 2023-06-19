@@ -25,7 +25,6 @@ export class ChatGateway {
 
 	@SubscribeMessage(CHAT_EVENT.JOIN)
 	handleJoinChat(@MessageBody() payload: ChatIdDto, @ConnectedSocket() client: Socket): void {
-		console.log("join");
 		client.join(payload.chatId);
 	}
 

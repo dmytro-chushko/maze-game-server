@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { Game } from "./shemas/game.shema";
-import { GAME_STATUS, IGame } from "src/types/game.types";
+import { GAME_STATUS, IExit, IGame, IPoint } from "src/types/game.types";
 import { CreateGameDto } from "./dto";
 import { generateDefaultMaze, generateMaze } from "src/utils/generate-maze";
 import { MoveDto } from "./dto/move.dto";
@@ -23,6 +23,14 @@ export class GameService {
 		} catch (error) {
 			throw new HttpException(`${error}`, error.status);
 		}
+	}
+
+	private isExitFoud(exit: IExit, playerLocation: IPoint): boolean {
+		return exit.exitX === playerLocation.pointX && exit.exitY === playerLocation.pointY;
+	}
+
+	private async setTheWinner(id: string, user: string): Promise<void> {
+		await this.gameModel.findByIdAndUpdate(id, { winner: user });
 	}
 
 	async getAllPendingGames(): Promise<IGame[]> {
@@ -110,11 +118,31 @@ export class GameService {
 					p_two_location: p_location,
 				});
 			}
+
 			await game.set({ turn: !game.turn }).save();
+
+			if (this.isExitFoud(game.exit, p_location)) {
+				await this.setTheWinner(id, user);
+			}
 
 			return message;
 		} catch (error) {
 			throw new HttpException(`${error}`, error.status);
+		}
+	}
+
+	async handleGiveUp(id: string, user: string): Promise<void> {
+		const game = await this.findGameById(id);
+
+		switch (user) {
+			case game.player_one:
+				await this.setTheWinner(id, game.player_two);
+				break;
+			case game.player_two:
+				await this.setTheWinner(id, game.player_one);
+				break;
+			default:
+				throw new HttpException("Invalid user name", HttpStatus.BAD_REQUEST);
 		}
 	}
 }

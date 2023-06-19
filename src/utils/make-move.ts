@@ -38,7 +38,6 @@ function moveController(
 	const { pointX, pointY } = p_location;
 	game_flow_maze[pointY][pointX] = true;
 
-	console.log(move);
 	switch (move) {
 		case MOVE.UP:
 			if (pointY === 0) {
