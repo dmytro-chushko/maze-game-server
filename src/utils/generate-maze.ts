@@ -18,16 +18,6 @@ export function generateMaze(size: number): IMaze {
 	const maze = generateDefaultMaze(size);
 	const eraiser: IEraiser = { x: 0, y: 0 };
 
-	// for (let y = 0; y < size; y++) {
-	// 	const row = [];
-
-	// 	for (let x = 0; x < size; x++) {
-	// 		row.push(false);
-	// 	}
-
-	// 	maze.push(row);
-	// }
-
 	while (!isMazeFinished(maze)) {
 		moveEraiser(eraiser, maze);
 	}

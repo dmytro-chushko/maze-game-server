@@ -58,13 +58,19 @@ export class GameService {
 		try {
 			const { player_one } = createGameDto;
 			const { maze, playerOnePoint, playerTwoPoint, exit } = generateMaze(15);
-			const game_flow_maze = generateDefaultMaze(15);
+			const p_one_game_flow_maze = generateDefaultMaze(maze.length);
+			const p_two_game_flow_maze = generateDefaultMaze(maze.length);
+
+			p_one_game_flow_maze[playerOnePoint.pointY][playerOnePoint.pointX] = true;
+			p_two_game_flow_maze[playerTwoPoint.pointY][playerTwoPoint.pointX] = true;
+			p_one_game_flow_maze[exit.exitY][exit.exitX] = true;
+			p_two_game_flow_maze[exit.exitY][exit.exitX] = true;
+
 			const newGame = new this.gameModel({
 				player_one,
 				maze,
-				game_flow_maze,
-				p_one_game_flow_maze: game_flow_maze,
-				p_two_game_flow_maze: game_flow_maze,
+				p_one_game_flow_maze,
+				p_two_game_flow_maze,
 				p_one_location: playerOnePoint,
 				p_two_location: playerTwoPoint,
 				exit,
