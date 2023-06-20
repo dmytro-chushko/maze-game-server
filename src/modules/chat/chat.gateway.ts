@@ -31,6 +31,7 @@ export class ChatGateway {
 	@SubscribeMessage(CHAT_EVENT.LEAVE)
 	handleLeaveChat(@MessageBody() payload: ChatIdDto, @ConnectedSocket() client: Socket): void {
 		client.leave(payload.chatId);
+		this.server.to(payload.chatId).emit(CHAT_EVENT.LOST_CONNECTION, { user: payload.user });
 	}
 
 	@SubscribeMessage(CHAT_EVENT.MESSAGE)
