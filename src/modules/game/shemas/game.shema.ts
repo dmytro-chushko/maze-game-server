@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+
 import { GAME_STATUS, IExit, IPoint, maze } from "src/types/game.types";
 
 @Schema({ timestamps: true })
@@ -18,7 +19,7 @@ export class Game {
 	@Prop({ type: String, default: "" })
 	winner: string;
 
-	@Prop({ type: Array, default: "" })
+	@Prop({ type: Array, required: true })
 	maze: maze;
 
 	@Prop({ type: Array, required: true })

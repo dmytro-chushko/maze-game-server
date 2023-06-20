@@ -105,19 +105,19 @@ function generateExit(size: number): IExit {
 	let exitX: number, exitY: number;
 
 	switch (exitSide) {
-		case 0: // верх
+		case 0:
 			exitX = 0;
 			exitY = Math.floor(Math.random() * Math.floor(size / 2)) * 2;
 			break;
-		case 1: // право
+		case 1:
 			exitX = Math.floor(Math.random() * Math.floor(size / 2)) * 2;
 			exitY = size - 1;
 			break;
-		case 2: // низ
+		case 2:
 			exitX = size - 1;
 			exitY = Math.floor(Math.random() * Math.floor(size / 2)) * 2;
 			break;
-		case 3: // ліво
+		case 3:
 			exitX = Math.floor(Math.random() * Math.floor(size / 2)) * 2;
 			exitY = 0;
 			break;

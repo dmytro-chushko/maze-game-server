@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
+
 import { Game } from "./shemas/game.shema";
 import { GAME_STATUS, IExit, IGame, IPoint } from "src/types/game.types";
 import { CreateGameDto } from "./dto";
@@ -30,7 +31,7 @@ export class GameService {
 	}
 
 	private async setTheWinner(id: string, user: string): Promise<void> {
-		await this.gameModel.findByIdAndUpdate(id, { winner: user });
+		await this.gameModel.findByIdAndUpdate(id, { winner: user, status: GAME_STATUS.FINISHED });
 	}
 
 	async getAllPendingGames(): Promise<IGame[]> {

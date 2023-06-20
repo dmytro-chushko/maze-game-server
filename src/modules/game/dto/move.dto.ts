@@ -1,4 +1,5 @@
 import { IsEnum, IsNotEmpty, IsString } from "class-validator";
+
 import { MOVE } from "src/types/game.types";
 
 export class MoveDto {
@@ -12,5 +13,5 @@ export class MoveDto {
 
 	@IsEnum(MOVE)
 	@IsNotEmpty()
-	move: MOVE;
+	readonly move: MOVE;
 }
